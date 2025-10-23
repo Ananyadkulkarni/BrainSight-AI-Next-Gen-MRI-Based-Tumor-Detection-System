@@ -27,5 +27,17 @@ Includes a **Jupyter Notebook**, a **Python script** (`main.py`), and a **simple
 ├── sample_images/                                     # Example MRI images
 └── README.md                                         
 
+## 📊 Results
+Metric	Score
+Accuracy	97%
+Precision	96%
+Recall	95%
+F1-Score	95%
+
+Sample Predictions:
+
+MRI Input	Model Prediction
+
+	🧠 Tumor
 
 	✅ No Tumor
