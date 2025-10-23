@@ -16,7 +16,7 @@ Includes a **Jupyter Notebook**, a **Python script** (`main.py`), and a **simple
 
 ---
 
-## 📂 Project Structure
+ 📂 Project Structure
 
 ```bash
 📁 Brain-Tumor-Detection-Using-Deep-Learning
