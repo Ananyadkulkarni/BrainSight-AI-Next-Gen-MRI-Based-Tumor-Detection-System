@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainSight Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            margin:0;
+            font-family:'Inter',sans-serif;
+            background:#f7f2ea;
+            color:#243b53;
+        }
+
+        .container{
+            width:100%;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-box{
+            width:420px;
+            background:white;
+            padding:45px;
+            border-radius:28px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            font-family:'Playfair Display',serif;
+            font-size:42px;
+            margin-bottom:8px;
+        }
+
+        p{
+            color:#6b7280;
+            margin-bottom:30px;
+        }
+
+        input{
+            width:100%;
+            padding:16px;
+            margin-bottom:18px;
+            border:1px solid #ddd;
+            border-radius:14px;
+            font-size:15px;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            padding:16px;
+            border:none;
+            border-radius:14px;
+            background:#244c73;
+            color:white;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#163754;
+        }
+
+        .demo{
+            margin-top:20px;
+            background:#f8fafc;
+            padding:15px;
+            border-radius:12px;
+            font-size:14px;
+        }
+
+        .error{
+            color:red;
+            margin-top:15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="login-box">
+        <h1>BrainSight</h1>
+        <p>Secure medical AI login portal</p>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="demo">
+            <b>Demo Credentials</b><br>
+            Username: testuser <br>
+            Password: password
+        </div>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
