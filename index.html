@@ -1,74 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tumor Detection System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain MRI Analysis</title>
 
-        .container {
-            max-width: 600px; /* Set a max width for the container */
-            margin: 0 auto;   /* Center the container horizontally */
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        .card {
-            border-radius: 15px;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
 
-        #results img {
-            max-height: 400px;
-            margin-top: 15px;
-        }
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#eef2f7,#f8fafc);
+}
 
-        .text-center {
-            text-align: center;
-        }
+/* NAVBAR */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    padding:15px 40px;
+    background:white;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
+}
 
-        .btn {
-            width: 100%;
-        }
+.nav-links a{
+    margin:0 15px;
+    cursor:pointer;
+    font-weight:500;
+}
 
-        .lead {
-            margin-bottom: 30px; /* Space between the heading and the form */
-        }
-    </style>
+/* POPUP LIST */
+.popup-list{
+    display:none;
+    position:absolute;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+    width:60%;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    z-index:100;
+}
+
+.popup-list ul{
+    list-style:none;
+}
+
+.popup-list li{
+    padding:8px 0;
+    border-bottom:1px solid #eee;
+}
+
+.logout-btn{
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+}
+
+/* HERO */
+.hero{
+    height:350px;
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1581594693702-fbdc51b2763b');
+    background-size:cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:40px;
+}
+
+/* MAIN */
+.container{padding:40px;}
+
+section{
+    background:white;
+    padding:25px;
+    margin-bottom:30px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2{color:#2c7be5;margin-bottom:15px;}
+
+input,select{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#2c7be5;
+    color:white;
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:10px;
+}
+
+button:hover{background:#1a5edb;}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.result-grid img{
+    width:60%;
+    max-width:280px;
+    border-radius:10px;
+}
+
+.alert-box{
+    background:#ffecec;
+    padding:15px;
+    border-left:5px solid red;
+}
+
+pre{
+    background:#f8f8f8;
+    padding:15px;
+    border-radius:10px;
+    white-space:pre-wrap;
+}
+
+.faq-question{
+    background:#f1f5ff;
+    padding:12px;
+    margin-bottom:10px;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+.faq-answer{display:none;padding:10px;}
+</style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="text-center">
-            <h1 class="display-4 text-primary">MRI Tumor Detection System</h1>
-            <p class="lead text-secondary">Upload an MRI image to detect if there is a tumor and its type.</p>
-        </div>
 
-        <!-- File Upload Form -->
-        <div class="card shadow p-4 mt-4">
-            <form method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="file" class="form-label">Select MRI Image:</label>
-                    <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Upload and Detect</button>
-            </form>
-        </div>
+<!-- NAVBAR -->
+<div class="navbar">
+<h2>BrainSight</h2>
 
-        {% if result %}
-        <!-- Display Results -->
-        <div id="results" class="mt-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h4 class="card-title text-success">{{ result }}</h4>
-                    <p class="card-text text-muted">Confidence: {{ confidence }}%</p>
-                    <img src="{{ file_path }}" class="img-fluid rounded" alt="Uploaded Image">
-                </div>
-            </div>
-        </div>
-        {% endif %}
-    </div>
+<div class="nav-links">
+<a onclick="toggleList('hospitals')">Hospital Name</a>
+<a onclick="toggleList('doctorsList')">Doctors</a>
+</div>
+
+<form action="/logout" method="get">
+<button class="logout-btn">Logout</button>
+</form>
+</div>
+
+<!-- HOSPITAL LIST -->
+<div id="hospitals" class="popup-list">
+<h3>Hospitals</h3>
+<ul>
+<li>Apollo Hospital – Bannerghatta Road, Bengaluru</li>
+<li>Fortis Hospital – Mulund West, Mumbai</li>
+<li>Manipal Hospital – Old Airport Road, Bengaluru</li>
+<li>Aster CMI Hospital – Hebbal, Bengaluru</li>
+<li>Sterling Hospital – Ahmedabad, Gujarat</li>
+<li>AIIMS – New Delhi</li>
+<li>Narayana Health – Bengaluru</li>
+<li>Max Hospital – Saket, New Delhi</li>
+</ul>
+</div>
+
+<!-- DOCTORS LIST -->
+<div id="doctorsList" class="popup-list">
+<h3>Doctors</h3>
+<ul>
+<li>Dr. Anuja Sharma</li>
+<li>Dr. Ravi Kumar</li>
+<li>Dr. Meera Reddy</li>
+<li>Dr. Sanjay Patel</li>
+<li>Dr. Kavya Rao</li>
+<li>Dr. Amit Verma</li>
+<li>Dr. Neha Singh</li>
+<li>Dr. Rahul Mehta</li>
+</ul>
+</div>
+
+<!-- HERO -->
+<div class="hero">Brain MRI AI Analysis</div>
+
+<div class="container">
+
+<section>
+<h2>Upload MRI Scan</h2>
+<form action="/predict" method="post" enctype="multipart/form-data">
+<input type="file" name="file" required>
+<button type="submit">Analyze</button>
+</form>
+</section>
+
+{% if uploaded_image %}
+
+<section>
+<h2>Analysis Result</h2>
+
+<div class="result-grid">
+<div>
+<img src="{{ uploaded_image }}">
+</div>
+
+<div>
+<p><b>Tumor:</b> {{ result_type }}</p>
+<p><b>Confidence:</b> {{ confidence }}</p>
+<p><b>Risk:</b> {{ risk }}</p>
+<p><b>Treatment:</b> {{ treatment }}</p>
+<p><b>Cost:</b> {{ treatment_cost }}</p>
+
+<div class="alert-box">{{ alert_message }}</div>
+</div>
+</div>
+</section>
+
+<section>
+<h2>Clinical Report</h2>
+
+<button onclick="downloadReport()">Download</button>
+<button onclick="speakReport()">🔊 Speak</button>
+<button onclick="stopSpeech()">⏹ Stop</button>
+
+<pre id="reportContent">
+{{ full_report }}
+
+Additional Explanation:
+The detected tumor type "{{ result_type }}" indicates a possible abnormal growth.
+Confidence level is {{ confidence }} and risk is {{ risk }}.
+Recommended treatment: {{ treatment }}.
+</pre>
+</section>
+
+<!-- ✅ APPOINTMENT BOOKING -->
+<section>
+<h2>Book Appointment</h2>
+
+<form id="appointmentForm">
+<input type="text" name="patient_name" placeholder="Patient Name" required>
+<input type="tel" name="phone" placeholder="Phone Number" required>
+<input type="number" name="age" placeholder="Age" required>
+
+<select name="doctor" required>
+<option value="">Select Doctor</option>
+<option>Dr. Anuja Sharma</option>
+<option>Dr. Ravi Kumar</option>
+<option>Dr. Meera Reddy</option>
+<option>Dr. Sanjay Patel</option>
+<option>Dr. Kavya Rao</option>
+<option>Dr. Amit Verma</option>
+<option>Dr. Neha Singh</option>
+<option>Dr. Rahul Mehta</option>
+</select>
+
+<input type="date" name="date" required>
+<input type="time" name="time" required>
+
+<button type="submit">Book Appointment</button>
+</form>
+
+<p id="bookingMessage" style="margin-top:10px;color:green;font-weight:600;"></p>
+</section>
+
+{% endif %}
+
+<section>
+<h2>FAQ</h2>
+
+<div class="faq-question" onclick="toggleAnswer('a1')">What is brain tumor detection?
+<div id="a1" class="faq-answer">AI detects abnormal brain tissue using MRI scans.</div></div>
+
+<div class="faq-question" onclick="toggleAnswer('a2')">Is AI accurate?
+<div id="a2" class="faq-answer">AI assists doctors but final decision is medical.</div></div>
+
+<div class="faq-question" onclick="toggleAnswer('a3')">Can tumor be cured?
+<div id="a3" class="faq-answer">Yes depending on type and stage.</div></div>
+
+</section>
+
+</div>
+
+<script>
+function toggleAnswer(id){
+let el=document.getElementById(id);
+el.style.display = el.style.display==="block"?"none":"block";
+}
+
+function toggleList(id){
+let lists=document.querySelectorAll(".popup-list");
+lists.forEach(l=>l.style.display="none");
+document.getElementById(id).style.display="block";
+}
+
+function downloadReport(){
+let text=document.getElementById("reportContent").innerText;
+let blob=new Blob([text],{type:"text/plain"});
+let link=document.createElement("a");
+link.href=URL.createObjectURL(blob);
+link.download="report.txt";
+link.click();
+}
+
+function speakReport(){
+let text=`
+Tumor type is {{ result_type }}.
+Confidence is {{ confidence }}.
+Risk level is {{ risk }}.
+Treatment is {{ treatment }}.
+`;
+
+let speech=new SpeechSynthesisUtterance(text);
+speech.rate=0.9;
+window.speechSynthesis.cancel();
+window.speechSynthesis.speak(speech);
+}
+
+function stopSpeech(){
+window.speechSynthesis.cancel();
+}
+
+/* BOOKING */
+document.getElementById("appointmentForm")?.addEventListener("submit", function(e){
+e.preventDefault();
+document.getElementById("bookingMessage").innerHTML="✅ Appointment Booked Successfully!";
+});
+</script>
+
 </body>
 </html>
